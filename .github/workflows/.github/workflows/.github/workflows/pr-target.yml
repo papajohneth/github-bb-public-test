@@ -1,0 +1,26 @@
+name: PR Target Secret Boundary Test
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  pr_target_context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print safe pull_request_target context
+        run: |
+          echo "EVENT_NAME=${{ github.event_name }}"
+          echo "ACTOR=${{ github.actor }}"
+          echo "REPOSITORY=${{ github.repository }}"
+          echo "BASE_REF=${{ github.base_ref }}"
+          echo "HEAD_REF=${{ github.head_ref }}"
+          echo "NOTICE=This workflow does NOT check out or execute fork code."
+          if [ -z "${{ secrets.TEST_SECRET_1 }}" ]; then
+            echo "TEST_SECRET_1_PRESENT=false"
+          else
+            echo "TEST_SECRET_1_PRESENT=true"
+          fi
