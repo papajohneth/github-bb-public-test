@@ -1,0 +1,24 @@
+name: PR Safe Context Test
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pr_context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print safe PR context
+        run: |
+          echo "EVENT_NAME=${{ github.event_name }}"
+          echo "ACTOR=${{ github.actor }}"
+          echo "REPOSITORY=${{ github.repository }}"
+          echo "REF=${{ github.ref }}"
+          echo "HEAD_REF=${{ github.head_ref }}"
+          if [ -z "${{ secrets.TEST_SECRET_1 }}" ]; then
+            echo "TEST_SECRET_1_PRESENT=false"
+          else
+            echo "TEST_SECRET_1_PRESENT=true"
+          fi
